@@ -4,12 +4,18 @@ SET(CMAKE_C_FLAGS "-O0")
 
 project(HashTableProject)
 
-if(MSVC)
-    add_compile_options(/W0) 
-endif()
-
-include_directories(include)
-
+# Znajdź wszystkie pliki źródłowe
 file(GLOB SOURCES "src/*.cpp")
+file(GLOB HEADERS "include/*.hpp")
 
-add_executable(HashTableProject ${SOURCES})
+# Utwórz bibliotekę z funkcjami podstawowymi
+add_library(DataStructures_lib STATIC ${SOURCES} ${HEADERS})
+target_include_directories(DataStructures_lib PUBLIC include/)
+
+# Plik wykonywalny z testami
+add_executable(tests src/main.cpp)
+target_link_libraries(tests DataStructures_lib)
+
+# Plik wykonywalny z menu (tylko jeśli plik istnieje)
+add_executable(menu src/menu.cpp)
+target_link_libraries(menu DataStructures_lib)
